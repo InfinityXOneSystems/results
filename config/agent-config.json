@@ -1,0 +1,208 @@
+{
+  "agent": {
+    "name": "Autonomous Results Agent",
+    "version": "1.0.0",
+    "workspaceRoot": "C:\\AI",
+    "resultsRoot": "C:\\AI\\repos\\results"
+  },
+  "sources": {
+    "scraping": {
+      "paths": [
+        "repos/crawler_scraper/results",
+        "repos/crawler_pipeline/results"
+      ],
+      "patterns": ["*.json", "*.html", "*.txt"],
+      "priority": "high"
+    },
+    "coding": {
+      "paths": [
+        "repos/agents/results",
+        "repos/agents/logs"
+      ],
+      "patterns": ["*.json", "*.log", "*.ts", "*.js"],
+      "priority": "high"
+    },
+    "analytics": {
+      "paths": [
+        "repos/analytics/results"
+      ],
+      "patterns": ["*.json", "*.csv", "*.parquet"],
+      "priority": "medium"
+    },
+    "metrics": {
+      "paths": [
+        "repos/metrics/results"
+      ],
+      "patterns": ["*.json", "*.metrics"],
+      "priority": "medium"
+    },
+    "evaluation": {
+      "paths": [
+        "repos/evaluation/results"
+      ],
+      "patterns": ["*.json", "*.eval"],
+      "priority": "medium"
+    },
+    "credentials": {
+      "paths": [
+        "credentials"
+      ],
+      "patterns": ["*.log", "*.json"],
+      "priority": "low"
+    },
+    "ai-insights": {
+      "paths": [
+        "repos/ai_service/insights"
+      ],
+      "patterns": ["*.json", "*.insight"],
+      "priority": "high"
+    }
+  },
+  "categories": {
+    "scraping": {
+      "description": "Web scraping results with code analysis",
+      "retentionDays": 90,
+      "compression": "gzip",
+      "indexing": true
+    },
+    "coding": {
+      "description": "Code generation and review results",
+      "retentionDays": 180,
+      "compression": "gzip",
+      "indexing": true
+    },
+    "analytics": {
+      "description": "Analytical insights and metrics",
+      "retentionDays": 365,
+      "compression": "gzip",
+      "indexing": true
+    },
+    "logs": {
+      "description": "System and agent logs",
+      "retentionDays": 30,
+      "compression": "gzip",
+      "indexing": false
+    },
+    "metrics": {
+      "description": "Performance and quality metrics",
+      "retentionDays": 365,
+      "compression": "gzip",
+      "indexing": true
+    },
+    "evaluation": {
+      "description": "Model evaluation results",
+      "retentionDays": 365,
+      "compression": "gzip",
+      "indexing": true
+    },
+    "credentials": {
+      "description": "Authentication and security logs",
+      "retentionDays": 90,
+      "compression": "gzip",
+      "indexing": false
+    },
+    "ai-insights": {
+      "description": "AI-generated insights and correlations",
+      "retentionDays": 180,
+      "compression": "gzip",
+      "indexing": true
+    }
+  },
+  "processing": {
+    "queueSize": 1000,
+    "batchSize": 10,
+    "processingInterval": 1000,
+    "analyticsInterval": 300000,
+    "cleanupInterval": 3600000
+  },
+  "quality": {
+    "assessment": {
+      "enabled": true,
+      "thresholds": {
+        "excellent": 90,
+        "good": 70,
+        "fair": 50,
+        "poor": 30
+      }
+    },
+    "autoTagging": {
+      "enabled": true,
+      "minConfidence": 0.7
+    }
+  },
+  "storage": {
+    "maxFileSize": "100MB",
+    "compression": {
+      "enabled": true,
+      "algorithm": "gzip",
+      "level": 6
+    },
+    "archival": {
+      "enabled": true,
+      "afterDays": 30,
+      "compressArchives": true
+    },
+    "cleanup": {
+      "enabled": true,
+      "afterDays": 365,
+      "confirmDeletions": true
+    }
+  },
+  "search": {
+    "indexing": {
+      "enabled": true,
+      "fullText": true,
+      "metadata": true
+    },
+    "caching": {
+      "enabled": true,
+      "ttl": 3600000
+    }
+  },
+  "analytics": {
+    "correlations": {
+      "enabled": true,
+      "maxDepth": 3
+    },
+    "trends": {
+      "enabled": true,
+      "windowDays": 30
+    },
+    "insights": {
+      "enabled": true,
+      "generationInterval": 3600000
+    }
+  },
+  "security": {
+    "encryption": {
+      "enabled": false,
+      "algorithm": "aes-256-gcm"
+    },
+    "accessControl": {
+      "enabled": true,
+      "roles": ["admin", "analyst", "viewer"]
+    },
+    "auditLogging": {
+      "enabled": true,
+      "retentionDays": 365
+    }
+  },
+  "monitoring": {
+    "metrics": {
+      "enabled": true,
+      "collectionInterval": 60000
+    },
+    "alerts": {
+      "enabled": true,
+      "thresholds": {
+        "errorRate": 0.05,
+        "processingDelay": 300000
+      }
+    },
+    "logging": {
+      "level": "info",
+      "rotation": "daily",
+      "retentionDays": 30
+    }
+  }
+}
