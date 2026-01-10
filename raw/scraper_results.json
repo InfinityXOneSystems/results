@@ -1,0 +1,140 @@
+{
+  "timestamp": "2026-01-10T07:54:07.000Z",
+  "scraper_run_id": "aether-scraper-001",
+  "distressed_properties": [
+    {
+      "address": "123 Main St, Detroit, MI 48201",
+      "city": "Detroit",
+      "state": "MI",
+      "zip": "48201",
+      "status": "foreclosure",
+      "price": 45000,
+      "beds": 3,
+      "baths": 1,
+      "sqft": 1200,
+      "source": "zillow",
+      "opportunity": "Fix and flip",
+      "estimated_value": 120000,
+      "potential_profit": 75000
+    },
+    {
+      "address": "456 Oak Ave, Cleveland, OH 44114",
+      "city": "Cleveland",
+      "state": "OH",
+      "zip": "44114",
+      "status": "bank_owned",
+      "price": 65000,
+      "beds": 4,
+      "baths": 2,
+      "sqft": 1800,
+      "source": "zillow",
+      "opportunity": "Rental investment",
+      "estimated_value": 150000,
+      "potential_profit": 85000
+    },
+    {
+      "address": "789 Elm St, Memphis, TN 38103",
+      "city": "Memphis",
+      "state": "TN",
+      "zip": "38103",
+      "status": "tax_delinquent",
+      "tax_amount": 15000,
+      "years_delinquent": 3,
+      "source": "county_records",
+      "opportunity": "Tax lien investment",
+      "potential_return": 25000
+    },
+    {
+      "address": "321 Pine Rd, Baltimore, MD 21202",
+      "city": "Baltimore",
+      "state": "MD",
+      "zip": "21202",
+      "status": "foreclosure",
+      "price": 55000,
+      "beds": 3,
+      "baths": 1.5,
+      "sqft": 1400,
+      "source": "redfin",
+      "opportunity": "Wholesale deal",
+      "estimated_value": 140000,
+      "potential_profit": 85000
+    },
+    {
+      "address": "654 Maple Dr, Philadelphia, PA 19103",
+      "city": "Philadelphia",
+      "state": "PA",
+      "zip": "19103",
+      "status": "probate",
+      "price": 75000,
+      "beds": 4,
+      "baths": 2,
+      "sqft": 2000,
+      "source": "probate_records",
+      "opportunity": "Estate sale",
+      "estimated_value": 180000,
+      "potential_profit": 105000
+    }
+  ],
+  "business_loan_leads": [
+    {
+      "company": "ABC Manufacturing Co",
+      "location": "Chicago, IL",
+      "industry": "Manufacturing",
+      "employees": 45,
+      "revenue": 2500000,
+      "loan_need": "Expansion capital",
+      "estimated_amount": 500000,
+      "credit_score": 720,
+      "source": "business_news",
+      "opportunity": "Series A funding"
+    },
+    {
+      "company": "XYZ Tech Solutions",
+      "location": "Austin, TX",
+      "industry": "Software",
+      "employees": 12,
+      "revenue": 800000,
+      "loan_need": "Growth capital",
+      "estimated_amount": 250000,
+      "credit_score": 750,
+      "source": "linkedin",
+      "opportunity": "Startup growth"
+    },
+    {
+      "company": "Green Energy Systems",
+      "location": "Denver, CO",
+      "industry": "Renewable Energy",
+      "employees": 28,
+      "revenue": 1800000,
+      "loan_need": "Equipment purchase",
+      "estimated_amount": 750000,
+      "credit_score": 680,
+      "source": "sba_loans",
+      "opportunity": "SBA loan eligible"
+    },
+    {
+      "company": "Local Logistics LLC",
+      "location": "Atlanta, GA",
+      "industry": "Transportation",
+      "employees": 35,
+      "revenue": 3200000,
+      "loan_need": "Fleet expansion",
+      "estimated_amount": 600000,
+      "credit_score": 710,
+      "source": "business_directory",
+      "opportunity": "Commercial loan"
+    },
+    {
+      "company": "Premium Restaurants Group",
+      "location": "Miami, FL",
+      "industry": "Food Service",
+      "employees": 150,
+      "revenue": 5000000,
+      "loan_need": "New location opening",
+      "estimated_amount": 1000000,
+      "credit_score": 740,
+      "source": "business_news",
+      "opportunity": "Expansion financing"
+    }
+  ]
+}
