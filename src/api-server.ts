@@ -6,6 +6,7 @@
  */
 
 import express from 'express';
+import fs from 'fs';
 import cors from 'cors';
 import helmet from 'helmet';
 import { AutonomousResultsAgent } from './autonomous-results-agent';
@@ -129,9 +130,7 @@ app.post('/api/ingest', async (req, res) => {
 
     // Create a temporary file for ingestion
     const tempFile = `/tmp/result_${Date.now()}_${Math.random()}.json`;
-    require('fs').writeFileSync(tempFile, JSON.stringify(data));
-
-    // Trigger ingestion (this would need to be implemented)
+    fs.writeFileSync(tempFile, JSON.stringify(data));    // Trigger ingestion (this would need to be implemented)
     res.json({
       message: 'Ingestion triggered',
       type,
@@ -162,11 +161,11 @@ app.get('/api/status', async (req, res) => {
 });
 
 // Error handling middleware
-app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((error: unknown, req: express.Request, res: express.Response) => {
   console.error('API Error:', error);
   res.status(500).json({
     error: 'Internal server error',
-    message: error.message,
+    message: (error as Error).message,
     timestamp: new Date().toISOString()
   });
 });

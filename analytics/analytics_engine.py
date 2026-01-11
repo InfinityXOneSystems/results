@@ -17,6 +17,7 @@ from collections import defaultdict, Counter
 import re
 from typing import Dict, List, Any, Optional
 
+
 class ResultsAnalyticsEngine:
     def __init__(self, results_root: str = "C:\\AI\\repos\\results"):
         self.results_root = Path(results_root)
@@ -28,12 +29,16 @@ class ResultsAnalyticsEngine:
         plt.style.use('default')
         sns.set_palette("husl")
 
-    def scan_results(self, category: Optional[str] = None, days: int = 30) -> Dict[str, List[Dict]]:
+    def scan_results(self,
+                     category: Optional[str] = None,
+                     days: int = 30) -> Dict[str,
+                                             List[Dict]]:
         """Scan and load results from specified categories"""
         results = defaultdict(list)
         cutoff_date = datetime.now() - timedelta(days=days)
 
-        categories_to_scan = [category] if category else self.get_available_categories()
+        categories_to_scan = [
+            category] if category else self.get_available_categories()
 
         for cat in categories_to_scan:
             cat_path = self.categories_dir / cat
@@ -54,7 +59,8 @@ class ResultsAnalyticsEngine:
 
                         # Check if directory is within date range
                         try:
-                            dir_date = datetime(int(year_dir.name), int(month_dir.name), int(day_dir.name))
+                            dir_date = datetime(int(year_dir.name), int(
+                                month_dir.name), int(day_dir.name))
                             if dir_date < cutoff_date:
                                 continue
                         except ValueError:
@@ -81,7 +87,8 @@ class ResultsAnalyticsEngine:
 
         return [d.name for d in self.categories_dir.iterdir() if d.is_dir()]
 
-    def generate_quality_report(self, results: Dict[str, List[Dict]]) -> Dict[str, Any]:
+    def generate_quality_report(
+            self, results: Dict[str, List[Dict]]) -> Dict[str, Any]:
         """Generate quality analysis report"""
         quality_stats = {
             'overall': {'total': 0, 'avg_score': 0, 'distribution': {}},
@@ -129,42 +136,54 @@ class ResultsAnalyticsEngine:
             # Score distribution
             bins = [0, 30, 50, 70, 90, 100]
             labels = ['Poor', 'Fair', 'Good', 'Excellent']
-            distribution = pd.cut(all_scores, bins=bins, labels=labels).value_counts()
+            distribution = pd.cut(
+                all_scores,
+                bins=bins,
+                labels=labels).value_counts()
             quality_stats['overall']['distribution'] = distribution.to_dict()
 
         # Generate recommendations
-        quality_stats['recommendations'] = self._generate_quality_recommendations(quality_stats)
+        quality_stats['recommendations'] = self._generate_quality_recommendations(
+            quality_stats)
 
         return quality_stats
 
-    def _generate_quality_recommendations(self, quality_stats: Dict) -> List[str]:
+    def _generate_quality_recommendations(
+            self, quality_stats: Dict) -> List[str]:
         """Generate quality improvement recommendations"""
         recommendations = []
 
         overall_avg = quality_stats['overall']['avg_score']
 
         if overall_avg < 50:
-            recommendations.append("Critical: Overall result quality is poor. Review data sources and enrichment processes.")
+            recommendations.append(
+                "Critical: Overall result quality is poor. Review data sources and enrichment processes.")
         elif overall_avg < 70:
-            recommendations.append("Consider improving data enrichment and quality assessment algorithms.")
+            recommendations.append(
+                "Consider improving data enrichment and quality assessment algorithms.")
 
         # Category-specific recommendations
         for category, stats in quality_stats['by_category'].items():
             if stats['avg_score'] < 50:
-                recommendations.append(f"Category '{category}' has poor quality scores. Review ingestion pipeline.")
+                recommendations.append(
+                    f"Category '{category}' has poor quality scores. Review ingestion pipeline.")
 
             # Issue-specific recommendations
             issues = stats.get('common_issues', {})
             if 'empty-data' in issues:
-                recommendations.append(f"Category '{category}': Many results lack meaningful data content.")
+                recommendations.append(
+                    f"Category '{category}': Many results lack meaningful data content.")
             if 'no-timestamp' in issues:
-                recommendations.append(f"Category '{category}': Add timestamp metadata to all results.")
+                recommendations.append(
+                    f"Category '{category}': Add timestamp metadata to all results.")
             if 'no-source' in issues:
-                recommendations.append(f"Category '{category}': Include source attribution in results.")
+                recommendations.append(
+                    f"Category '{category}': Include source attribution in results.")
 
         return recommendations
 
-    def analyze_correlations(self, results: Dict[str, List[Dict]]) -> Dict[str, Any]:
+    def analyze_correlations(
+            self, results: Dict[str, List[Dict]]) -> Dict[str, Any]:
         """Analyze correlations between different result types"""
         correlations = {
             'cross_category': {},
@@ -175,7 +194,7 @@ class ResultsAnalyticsEngine:
         # Cross-category correlations
         categories = list(results.keys())
         for i, cat1 in enumerate(categories):
-            for cat2 in categories[i+1:]:
+            for cat2 in categories[i + 1:]:
                 correlation = self._calculate_category_correlation(
                     results[cat1], results[cat2]
                 )
@@ -183,14 +202,19 @@ class ResultsAnalyticsEngine:
                     correlations['cross_category'][f"{cat1}-{cat2}"] = correlation
 
         # Temporal patterns
-        correlations['temporal_patterns'] = self._analyze_temporal_patterns(results)
+        correlations['temporal_patterns'] = self._analyze_temporal_patterns(
+            results)
 
         # Content clustering
-        correlations['content_clusters'] = self._cluster_similar_content(results)
+        correlations['content_clusters'] = self._cluster_similar_content(
+            results)
 
         return correlations
 
-    def _calculate_category_correlation(self, cat1_results: List[Dict], cat2_results: List[Dict]) -> float:
+    def _calculate_category_correlation(
+            self,
+            cat1_results: List[Dict],
+            cat2_results: List[Dict]) -> float:
         """Calculate correlation between two categories based on temporal proximity"""
         if not cat1_results or not cat2_results:
             return 0.0
@@ -213,7 +237,8 @@ class ResultsAnalyticsEngine:
 
         return proximity_count / max(total_possible, 1)
 
-    def _analyze_temporal_patterns(self, results: Dict[str, List[Dict]]) -> Dict[str, Any]:
+    def _analyze_temporal_patterns(
+            self, results: Dict[str, List[Dict]]) -> Dict[str, Any]:
         """Analyze temporal patterns in results"""
         patterns = {}
 
@@ -230,13 +255,15 @@ class ResultsAnalyticsEngine:
 
             patterns[category] = {
                 'hourly_distribution': dict(hourly_counts),
-                'peak_hour': max(hourly_counts.keys(), key=lambda k: hourly_counts[k]) if hourly_counts else None,
-                'total_results': len(items)
-            }
+                'peak_hour': max(
+                    hourly_counts.keys(),
+                    key=lambda k: hourly_counts[k]) if hourly_counts else None,
+                'total_results': len(items)}
 
         return patterns
 
-    def _cluster_similar_content(self, results: Dict[str, List[Dict]]) -> List[Dict]:
+    def _cluster_similar_content(
+            self, results: Dict[str, List[Dict]]) -> List[Dict]:
         """Cluster results with similar content"""
         clusters = []
 
@@ -261,7 +288,8 @@ class ResultsAnalyticsEngine:
 
         return sorted(clusters, key=lambda x: x['count'], reverse=True)
 
-    def generate_insights_report(self, results: Dict[str, List[Dict]]) -> Dict[str, Any]:
+    def generate_insights_report(
+            self, results: Dict[str, List[Dict]]) -> Dict[str, Any]:
         """Generate AI-powered insights from results"""
         insights = {
             'key_findings': [],
@@ -273,7 +301,8 @@ class ResultsAnalyticsEngine:
 
         # Analyze quality trends
         quality_report = self.generate_quality_report(results)
-        insights['key_findings'].extend(self._extract_key_findings(quality_report))
+        insights['key_findings'].extend(
+            self._extract_key_findings(quality_report))
 
         # Analyze correlations
         correlations = self.analyze_correlations(results)
@@ -283,7 +312,8 @@ class ResultsAnalyticsEngine:
         insights['anomalies'].extend(self._detect_anomalies(results))
 
         # Generate recommendations
-        insights['recommendations'].extend(self._generate_actionable_recommendations(results))
+        insights['recommendations'].extend(
+            self._generate_actionable_recommendations(results))
 
         return insights
 
@@ -293,20 +323,26 @@ class ResultsAnalyticsEngine:
 
         overall_avg = quality_report['overall']['avg_score']
         if overall_avg > 85:
-            findings.append(f"Excellent overall result quality ({overall_avg:.1f}%)")
+            findings.append(
+                f"Excellent overall result quality ({overall_avg:.1f}%)")
         elif overall_avg > 70:
-            findings.append(f"Good overall result quality ({overall_avg:.1f}%)")
+            findings.append(
+                f"Good overall result quality ({overall_avg:.1f}%)")
         elif overall_avg > 50:
-            findings.append(f"Fair overall result quality ({overall_avg:.1f}%) - room for improvement")
+            findings.append(
+                f"Fair overall result quality ({overall_avg:.1f}%) - room for improvement")
         else:
-            findings.append(f"Poor overall result quality ({overall_avg:.1f}%) - immediate attention needed")
+            findings.append(
+                f"Poor overall result quality ({overall_avg:.1f}%) - immediate attention needed")
 
         # Category-specific findings
         for category, stats in quality_report['by_category'].items():
             if stats['avg_score'] > 90:
-                findings.append(f"Category '{category}' shows exceptional quality")
+                findings.append(
+                    f"Category '{category}' shows exceptional quality")
             elif stats['avg_score'] < 50:
-                findings.append(f"Category '{category}' requires quality improvement")
+                findings.append(
+                    f"Category '{category}' requires quality improvement")
 
         return findings
 
@@ -319,13 +355,15 @@ class ResultsAnalyticsEngine:
             if correlation > 0.7:
                 trends.append(f"Strong correlation between {pair} categories")
             elif correlation > 0.5:
-                trends.append(f"Moderate correlation between {pair} categories")
+                trends.append(
+                    f"Moderate correlation between {pair} categories")
 
         # Temporal patterns
         for category, pattern in correlations['temporal_patterns'].items():
             peak_hour = pattern.get('peak_hour')
             if peak_hour is not None:
-                trends.append(f"Category '{category}' peaks at hour {peak_hour}")
+                trends.append(
+                    f"Category '{category}' peaks at hour {peak_hour}")
 
         return trends
 
@@ -338,36 +376,51 @@ class ResultsAnalyticsEngine:
                 continue
 
             # Check for unusual quality scores
-            scores = [i.get('metadata', {}).get('quality', {}).get('score', 0) for i in items]
+            scores = [
+                i.get(
+                    'metadata',
+                    {}).get(
+                    'quality',
+                    {}).get(
+                    'score',
+                    0) for i in items]
             if scores:
                 mean_score = np.mean(scores)
                 std_score = np.std(scores)
 
-                outliers = [s for s in scores if abs(s - mean_score) > 2 * std_score]
+                outliers = [
+                    s for s in scores if abs(
+                        s - mean_score) > 2 * std_score]
                 if outliers:
-                    anomalies.append(f"Category '{category}' has {len(outliers)} quality score outliers")
+                    anomalies.append(
+                        f"Category '{category}' has {len(outliers)} quality score outliers")
 
             # Check for unusual volumes
             if len(items) > 1000:
-                anomalies.append(f"Category '{category}' has unusually high volume ({len(items)} results)")
+                anomalies.append(
+                    f"Category '{category}' has unusually high volume ({len(items)} results)")
 
         return anomalies
 
-    def _generate_actionable_recommendations(self, results: Dict[str, List[Dict]]) -> List[str]:
+    def _generate_actionable_recommendations(
+            self, results: Dict[str, List[Dict]]) -> List[str]:
         """Generate actionable recommendations"""
         recommendations = []
 
         # Volume-based recommendations
         total_results = sum(len(items) for items in results.values())
         if total_results > 10000:
-            recommendations.append("Consider implementing result archiving for high-volume categories")
+            recommendations.append(
+                "Consider implementing result archiving for high-volume categories")
 
         # Category-specific recommendations
         for category, items in results.items():
             if len(items) == 0:
-                recommendations.append(f"No results found for category '{category}' - check ingestion pipeline")
+                recommendations.append(
+                    f"No results found for category '{category}' - check ingestion pipeline")
             elif len(items) < 10:
-                recommendations.append(f"Low result volume for category '{category}' - verify data sources")
+                recommendations.append(
+                    f"Low result volume for category '{category}' - verify data sources")
 
         # Quality-based recommendations
         quality_report = self.generate_quality_report(results)
@@ -395,13 +448,20 @@ class ResultsAnalyticsEngine:
 
         return str(html_path)
 
-    def _create_quality_chart(self, results: Dict[str, List[Dict]], report_dir: Path):
+    def _create_quality_chart(
+            self, results: Dict[str, List[Dict]], report_dir: Path):
         """Create quality distribution chart"""
         quality_data = []
 
         for category, items in results.items():
             for item in items:
-                score = item.get('metadata', {}).get('quality', {}).get('score', 0)
+                score = item.get(
+                    'metadata',
+                    {}).get(
+                    'quality',
+                    {}).get(
+                    'score',
+                    0)
                 quality_data.append({'category': category, 'score': score})
 
         if quality_data:
@@ -412,10 +472,15 @@ class ResultsAnalyticsEngine:
             plt.title('Result Quality Distribution by Category')
             plt.xticks(rotation=45)
             plt.tight_layout()
-            plt.savefig(report_dir / 'quality_distribution.png', dpi=150, bbox_inches='tight')
+            plt.savefig(
+                report_dir /
+                'quality_distribution.png',
+                dpi=150,
+                bbox_inches='tight')
             plt.close()
 
-    def _create_volume_chart(self, results: Dict[str, List[Dict]], report_dir: Path):
+    def _create_volume_chart(
+            self, results: Dict[str, List[Dict]], report_dir: Path):
         """Create category volume chart"""
         volumes = {cat: len(items) for cat, items in results.items()}
 
@@ -426,10 +491,15 @@ class ResultsAnalyticsEngine:
             plt.xticks(rotation=45)
             plt.ylabel('Number of Results')
             plt.tight_layout()
-            plt.savefig(report_dir / 'category_volumes.png', dpi=150, bbox_inches='tight')
+            plt.savefig(
+                report_dir /
+                'category_volumes.png',
+                dpi=150,
+                bbox_inches='tight')
             plt.close()
 
-    def _create_temporal_chart(self, results: Dict[str, List[Dict]], report_dir: Path):
+    def _create_temporal_chart(
+            self, results: Dict[str, List[Dict]], report_dir: Path):
         """Create temporal patterns chart"""
         temporal_data = []
 
@@ -441,7 +511,8 @@ class ResultsAnalyticsEngine:
                     hourly_counts[date.hour] += 1
 
             for hour, count in hourly_counts.items():
-                temporal_data.append({'category': category, 'hour': hour, 'count': count})
+                temporal_data.append(
+                    {'category': category, 'hour': hour, 'count': count})
 
         if temporal_data:
             df = pd.DataFrame(temporal_data)
@@ -452,10 +523,18 @@ class ResultsAnalyticsEngine:
             plt.xlabel('Hour of Day')
             plt.ylabel('Result Count')
             plt.tight_layout()
-            plt.savefig(report_dir / 'temporal_patterns.png', dpi=150, bbox_inches='tight')
+            plt.savefig(
+                report_dir /
+                'temporal_patterns.png',
+                dpi=150,
+                bbox_inches='tight')
             plt.close()
 
-    def _generate_html_report(self, results: Dict[str, List[Dict]], report_dir: Path, timestamp: str) -> Path:
+    def _generate_html_report(self,
+                              results: Dict[str,
+                                            List[Dict]],
+                              report_dir: Path,
+                              timestamp: str) -> Path:
         """Generate comprehensive HTML report"""
         quality_report = self.generate_quality_report(results)
         correlations = self.analyze_correlations(results)
@@ -555,6 +634,7 @@ class ResultsAnalyticsEngine:
 
         print(f"✅ Analytics report generated: {report_path}")
         return report_path
+
 
 if __name__ == "__main__":
     engine = ResultsAnalyticsEngine()

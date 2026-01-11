@@ -10,13 +10,16 @@ CHECK_INTERVAL = 5
 
 seen = set()
 
+
 def list_files():
     if not PIPELINE_RESULTS.exists():
         return []
     return sorted([p for p in PIPELINE_RESULTS.glob('*.json')])
 
+
 def run_cmd(script_path):
     subprocess.run(["python", str(script_path)], check=False)
+
 
 if __name__ == '__main__':
     print("Starting watcher, checking:", PIPELINE_RESULTS)

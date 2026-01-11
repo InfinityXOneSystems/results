@@ -8,6 +8,7 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 if not DATABASE_URL:
     raise RuntimeError('DATABASE_URL not set')
 
+
 def ensure_schema(conn):
     cur = conn.cursor()
     cur.execute('''
@@ -29,6 +30,7 @@ def ensure_schema(conn):
     ''')
     conn.commit()
 
+
 def load_jsonl(path, insert_fn):
     if not path.exists():
         return 0
@@ -46,20 +48,29 @@ def load_jsonl(path, insert_fn):
             count += 1
     return count
 
+
 def main():
     conn = psycopg2.connect(DATABASE_URL)
     ensure_schema(conn)
     cur = conn.cursor()
 
     def insert_scrape(rec):
-        cur.execute('INSERT INTO scrapes (url,title,text,fetched_at) VALUES (%s,%s,%s,%s)', (
-            rec.get('url'), rec.get('title'), rec.get('text'), rec.get('fetched_at')
-        ))
+        cur.execute(
+            'INSERT INTO scrapes (url,title,text,fetched_at) VALUES (%s,%s,%s,%s)',
+            (rec.get('url'),
+             rec.get('title'),
+             rec.get('text'),
+             rec.get('fetched_at')))
 
     def insert_pred(rec):
-        cur.execute('INSERT INTO predictions (url,fetched_at,forecast_json) VALUES (%s,%s,%s)', (
-            rec.get('url'), rec.get('fetched_at'), json.dumps(rec.get('forecast', {}))
-        ))
+        cur.execute(
+            'INSERT INTO predictions (url,fetched_at,forecast_json) VALUES (%s,%s,%s)',
+            (rec.get('url'),
+             rec.get('fetched_at'),
+             json.dumps(
+                rec.get(
+                    'forecast',
+                    {}))))
 
     n1 = load_jsonl(BASE / 'cleaned' / 'cleaned.jsonl', insert_scrape)
     n2 = load_jsonl(BASE / 'cleaned' / 'predictions.jsonl', insert_pred)
@@ -67,6 +78,7 @@ def main():
     print(f'Inserted {n1} scrapes and {n2} predictions')
     cur.close()
     conn.close()
+
 
 if __name__ == '__main__':
     main()
